@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('cases/get-beneficiaries', [\App\Http\Controllers\CaseController::class, 'getBeneficiaries'])->name('case.getBeneficiaries');
     Route::post('cases/get-beneficiary', [\App\Http\Controllers\CaseController::class, 'getBeneficiary'])->name('case.getBeneficiary');
     Route::post('cases/delete-beneficiary', [\App\Http\Controllers\CaseController::class, 'deleteBeneficiary'])->name('case.deleteBeneficiary');
+    Route::post('cases/get-beneficiaries-sidebar', [\App\Http\Controllers\CaseController::class, 'getBeneficiariesSidebar'])->name('case.getBeneficiariesSidebar');
 
     Route::post('upload-document', [\App\Http\Controllers\CaseController::class, 'uploadDoc'])->name('upload-document');
 });

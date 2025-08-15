@@ -35,6 +35,7 @@
                         Information</a>
                     <ul class="policy-dropdown-menu policy-dropdown-submenu" style="display: none;">
                         <li><a class="policy-dropdown-item each-options" data-section="section-d-1">Beneficiary</a></li>
+                        <li class="beneficiaries-submenu"></li>
                     </ul>
                 </li>
                 <li class="dropdown child-dropdown">

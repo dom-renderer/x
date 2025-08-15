@@ -127,7 +127,7 @@ li .policy-dropdown-menu .policy-dropdown-item:hover {
 	-o-border-radius: 6px;
 }
 
-/* Insured Life Sidebar Styles */
+/* insured css */
 .insured-life-item {
 	margin-bottom: 8px;
 }
@@ -197,7 +197,6 @@ li .policy-dropdown-menu .policy-dropdown-item:hover {
 	background-color: #c82333;
 }
 
-/* Additional styles for insured life sidebar */
 .insured-lives-submenu {
 	margin-top: 8px;
 }
@@ -210,7 +209,6 @@ li .policy-dropdown-menu .policy-dropdown-item:hover {
 	font-size: 11px;
 }
 
-/* Ensure proper alignment in sidebar */
 .policy-dropdown-menu .insured-life-item {
 	list-style: none;
 }
@@ -218,6 +216,98 @@ li .policy-dropdown-menu .policy-dropdown-item:hover {
 .policy-dropdown-menu .insured-life-item a {
 	text-decoration: none;
 }
+
+/* insured css */
+/* ben css */
+.beneficiary-item {
+	margin-bottom: 8px;
+}
+
+.beneficiary-link {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+	padding: 8px 12px !important;
+	background: #f8f9fa !important;
+	border: 1px solid #e9ecef !important;
+	border-radius: 4px !important;
+	text-decoration: none !important;
+	color: #495057 !important;
+	font-size: 14px !important;
+	transition: all 0.2s ease !important;
+}
+
+.beneficiary-link:hover {
+	background: #e9ecef !important;
+	border-color: #adb5bd !important;
+	text-decoration: none !important;
+	color: #495057 !important;
+}
+
+.beneficiary-name {
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-right: 8px;
+}
+
+.beneficiary-actions {
+	display: flex;
+	gap: 4px;
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
+}
+
+.beneficiary-link:hover .beneficiary-actions {
+	opacity: 1;
+}
+
+.beneficiary-actions .btn {
+	padding: 2px 6px;
+	font-size: 12px;
+	border-radius: 3px;
+	border: none;
+}
+
+.beneficiary-actions .edit-beneficiary {
+	background-color: #007bff;
+	color: white;
+}
+
+.beneficiary-actions .edit-beneficiary:hover {
+	background-color: #0056b3;
+}
+
+.beneficiary-actions .delete-beneficiary {
+	background-color: #dc3545;
+	color: white;
+}
+
+.beneficiary-actions .delete-beneficiary:hover {
+	background-color: #c82333;
+}
+
+.beneficiary-submenu {
+	margin-top: 8px;
+}
+
+.beneficiary-submenu .beneficiary-item:last-child {
+	margin-bottom: 0;
+}
+
+.beneficiary-link .fas {
+	font-size: 11px;
+}
+
+.policy-dropdown-menu .beneficiary-item {
+	list-style: none;
+}
+
+.policy-dropdown-menu .beneficiary-item a {
+	text-decoration: none;
+}
+/* ben css */
 
 li .policy-dropdown-menu.show {
 	position: unset !important;

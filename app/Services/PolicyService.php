@@ -573,6 +573,7 @@ class PolicyService {
                 case self::$sections[5]:
 
                     if (isset($request['data']) && is_array($request['data']) && isset($request['data']['insured_life_id'])) {
+                        dd($request['data']);
                         $payload = [
                             'insured_life_id' => $request['data']['insured_life_id'],
                             'policy_id' => $policy->id,
@@ -583,17 +584,17 @@ class PolicyService {
                             'zip' => $request['data']['zip'] ?? '',
                             'country' => $request['data']['country'] ?? '',
                             'city' => $request['data']['city'] ?? '',
-                            'status' => $request['data']['d-1-status'] ?? 'single',
-                            'smoker_status' => $request['data']['d-1-smoker'] ?? 'non-smoker',
+                            'status' => $request['data']['status'] ?? 'single',
+                            'smoker_status' => $request['data']['smoker_status'] ?? 'non-smoker',
                             'nationality' => $request['data']['nationality'] ?? '',
-                            'gender' => $request['data']['d-1-gender'] ?? 'male',
+                            'gender' => $request['data']['gender'] ?? 'male',
                             'country_of_legal_residence' => $request['data']['country_of_legal_residence'] ?? '',
                             'passport_number' => $request['data']['passport_number'] ?? '',
                             'country_of_issuance' => $request['data']['country_of_issuance'] ?? '',
                             'relationship_to_policyholder' => $request['data']['relationship_to_policyholder'] ?? '',
                             'email' => $request['data']['email'] ?? '',
                             'beneficiary_death_benefit_allocation' => (float)($request['data']['beneficiary_death_benefit_allocation'] ?? 0),
-                            'designation_of_beneficiary' => $request['data']['d-1-designation'] ?? 'revocable',
+                            'designation_of_beneficiary' => $request['data']['designation_of_beneficiary'] ?? 'revocable',
                             'in_draft' => $savingType == 'draft' ? 1 : 0,
                             'silent_save' => $request->get('silent_save', 0)
                         ];
