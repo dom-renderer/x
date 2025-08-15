@@ -127,6 +127,98 @@ li .policy-dropdown-menu .policy-dropdown-item:hover {
 	-o-border-radius: 6px;
 }
 
+/* Insured Life Sidebar Styles */
+.insured-life-item {
+	margin-bottom: 8px;
+}
+
+.insured-life-link {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+	padding: 8px 12px !important;
+	background: #f8f9fa !important;
+	border: 1px solid #e9ecef !important;
+	border-radius: 4px !important;
+	text-decoration: none !important;
+	color: #495057 !important;
+	font-size: 14px !important;
+	transition: all 0.2s ease !important;
+}
+
+.insured-life-link:hover {
+	background: #e9ecef !important;
+	border-color: #adb5bd !important;
+	text-decoration: none !important;
+	color: #495057 !important;
+}
+
+.insured-name {
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-right: 8px;
+}
+
+.insured-actions {
+	display: flex;
+	gap: 4px;
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
+}
+
+.insured-life-link:hover .insured-actions {
+	opacity: 1;
+}
+
+.insured-actions .btn {
+	padding: 2px 6px;
+	font-size: 12px;
+	border-radius: 3px;
+	border: none;
+}
+
+.insured-actions .edit-insured {
+	background-color: #007bff;
+	color: white;
+}
+
+.insured-actions .edit-insured:hover {
+	background-color: #0056b3;
+}
+
+.insured-actions .delete-insured {
+	background-color: #dc3545;
+	color: white;
+}
+
+.insured-actions .delete-insured:hover {
+	background-color: #c82333;
+}
+
+/* Additional styles for insured life sidebar */
+.insured-lives-submenu {
+	margin-top: 8px;
+}
+
+.insured-lives-submenu .insured-life-item:last-child {
+	margin-bottom: 0;
+}
+
+.insured-life-link .fas {
+	font-size: 11px;
+}
+
+/* Ensure proper alignment in sidebar */
+.policy-dropdown-menu .insured-life-item {
+	list-style: none;
+}
+
+.policy-dropdown-menu .insured-life-item a {
+	text-decoration: none;
+}
+
 li .policy-dropdown-menu.show {
 	position: unset !important;
 	transform: none !important;

@@ -26,6 +26,8 @@
                         Information</a>
                     <ul class="policy-dropdown-menu policy-dropdown-submenu" style="display: none;">
                         <li><a class="policy-dropdown-item each-options" data-section="section-c-1">Insured Life</a></li>
+                        <li class="insured-lives-submenu">
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown child-dropdown">

@@ -479,10 +479,6 @@ class CaseController extends Controller
                                 <div class="col-sm-9">'.($insuredLife->country_of_legal_residence ?: 'N/A').'</div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-sm-3"><strong>Countries of Tax Residence:</strong></div>
-                                <div class="col-sm-9">'.($insuredLife->countries_of_tax_residence ?: 'N/A').'</div>
-                            </div>
-                            <div class="row mb-2">
                                 <div class="col-sm-3"><strong>Passport Number:</strong></div>
                                 <div class="col-sm-9">'.($insuredLife->passport_number ?: 'N/A').'</div>
                             </div>
@@ -548,5 +544,45 @@ class CaseController extends Controller
             ->delete();
 
         return response()->json(['status' => true]);
+    }
+
+    public function getInsuredLivesSidebar(Request $request) {
+        $request->validate([
+            'policy_id' => 'required|integer'
+        ]);
+
+        $insuredLives = \App\Models\PolicyInsuredLifeInformation::where('policy_id', $request->policy_id)->get();
+        
+        $html = '';
+        if($insuredLives && $insuredLives->count() > 0) {
+            foreach($insuredLives as $insuredLife) {
+                $displayName = $insuredLife->name ?: 'Insured Life';
+                $html .= '<li class="insured-life-item" data-id="'.$insuredLife->id.'">
+                    <a class="insured-life-link" href="#" data-section="section-c-1" data-insured-id="'.$insuredLife->id.'">
+                        <span class="insured-name">'.$displayName.'</span>
+                        <div class="insured-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-insured" onclick="editInsuredLifeFromSidebar('.$insuredLife->id.')" title="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger delete-insured" onclick="deleteInsuredLifeFromSidebar('.$insuredLife->id.')" title="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                <line x1="10" y1="11" x2="10" y2="17" />
+                                <line x1="14" y1="11" x2="14" y2="17" />
+                                </svg>
+                            </button>
+                        </div>
+                    </a>
+                </li>';
+            }
+        }
+
+        return response()->json([
+            'html' => $html
+        ]);
     }
 }

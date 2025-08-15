@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('cases/get-communications', [\App\Http\Controllers\CaseController::class, 'getCommunications'])->name('case.get-communications');
     Route::get('cases/get-case-file-notes', [\App\Http\Controllers\CaseController::class, 'getCaseFileNotes'])->name('case.get-case-file-notes');
     Route::post('cases/get-insured-lives', [\App\Http\Controllers\CaseController::class, 'getInsuredLives'])->name('case.getInsuredLives');
+    Route::post('cases/get-insured-lives-sidebar', [\App\Http\Controllers\CaseController::class, 'getInsuredLivesSidebar'])->name('case.getInsuredLivesSidebar');
     Route::post('cases/get-insured-life', [\App\Http\Controllers\CaseController::class, 'getInsuredLife'])->name('case.getInsuredLife');
     Route::post('cases/delete-insured-life', [\App\Http\Controllers\CaseController::class, 'deleteInsuredLife'])->name('case.deleteInsuredLife');
     Route::post('cases/get-beneficiaries', [\App\Http\Controllers\CaseController::class, 'getBeneficiaries'])->name('case.getBeneficiaries');

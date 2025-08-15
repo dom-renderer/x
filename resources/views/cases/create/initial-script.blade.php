@@ -831,10 +831,25 @@ $(document).ready(function () {
 let currentEditId = null;
 
 $(document).ready(function() {
-    loadInsuredLives();    
+    // loadInsuredLives();    
     $('#save-add-new').click(function() {
         saveInsuredLife('add_new');
     });
+
+    $(document).on('click', '.insured-life-link', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        $('.case-section').addClass('d-none');
+        $('#section-c-1').removeClass('d-none');
+        
+        $('.each-options').removeClass('active');
+        $('.policy-dropdown-item[data-section="section-c-1"]').addClass('active');
+        
+        // $(this).closest('.policy-dropdown-submenu').slideUp();
+    });
+
+    loadInsuredLivesSidebar();
 
 });
 
@@ -851,6 +866,29 @@ function loadInsuredLives() {
         },
         success: function(response) {
             $('#insured-life-accordion').html(response.html);
+        }
+    });
+
+    loadInsuredLivesSidebar();
+}
+
+function loadInsuredLivesSidebar() {
+    const policyId = "{{ $policy->id ?? '' }}";
+    if (!policyId) return;
+    
+    $.ajax({
+        url: '{{ route("case.getInsuredLivesSidebar") }}',
+        method: 'POST',
+        data: {
+            policy_id: policyId,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            $('.insured-lives-submenu').html(response.html);
+            
+            if (response.html && response.html.trim() !== '') {
+                // $('.policy-dropdown-toggle[data-section="insured"]').parent().find('.policy-dropdown-submenu').show();
+            }
         }
     });
 }
@@ -899,8 +937,12 @@ function saveInsuredLife(action) {
             if (response.next_section) {
                 if (action === 'add_new') {
                     resetForm();
-                    loadInsuredLives();
+                    loadInsuredLivesSidebar();
+                    // loadInsuredLives();
                 }
+            } else {
+                // loadInsuredLives();
+                loadInsuredLivesSidebar();
             }
         },
         error: function(xhr) {
@@ -993,6 +1035,8 @@ function deleteInsuredLife(id) {
                         if ($(`#ins-life-reco-${id}`).length) {
                             $(`#ins-life-reco-${id}`).remove();
                         }
+                        
+                        loadInsuredLivesSidebar();
                     }
                 },
                 error: function() {
@@ -1003,6 +1047,19 @@ function deleteInsuredLife(id) {
     });
 }
 
+function editInsuredLifeFromSidebar(id) {
+    $('.case-section').addClass('d-none');
+    $('#section-c-1').removeClass('d-none');
+    
+    $('.each-options').removeClass('active');
+    $('.policy-dropdown-item[data-section="section-c-1"]').addClass('active');
+    
+    editInsuredLife(id);
+}
+
+function deleteInsuredLifeFromSidebar(id) {
+    deleteInsuredLife(id);
+}
 </script>
 <script>
 
