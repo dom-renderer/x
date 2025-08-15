@@ -92,7 +92,7 @@
             <label for="c1country_of_legal_residence" class="form-label">Country of Legal Residence @requiredField</label>
             <input type="text" class="form-control" id="c1country_of_legal_residence" name="country_of_legal_residence" >
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6 mb-3" id="tempc1taxbox">
             <label for="c1countries_of_tax_residence" class="form-label">Countries of Tax Residence @requiredField</label>
             <div class="row section-c-1-country-tax-residence-row">
                 <div class="col-sm-10">

@@ -396,7 +396,11 @@ class CaseController extends Controller
         ]);
 
         $beneficiary = \App\Models\PolicyBeneficiary::with('insured')->where('id', $request->beneficiary_id)->first();
-        return response()->json(['data' => $beneficiary]);
+
+        return response()->json([
+            'data' => $beneficiary,
+            'tax' => \App\Models\PolicyCountryOfTaxResidence::where('eloquent', \App\Models\PolicyBeneficiary::class)->where('eloquent_id', $request->beneficiary_id)->where('policy_id', $request->policy_id)->pluck('country')->toArray()
+        ]);
     }
 
     public function deleteBeneficiary(Request $request) {
@@ -529,7 +533,8 @@ class CaseController extends Controller
             ->first();
 
         return response()->json([
-            'data' => $insuredLife
+            'data' => $insuredLife,
+            'tax' => \App\Models\PolicyCountryOfTaxResidence::where('eloquent', \App\Models\PolicyInsuredLifeInformation::class)->where('eloquent_id', $request->insured_life_id)->where('policy_id', $request->policy_id)->pluck('country')->toArray()
         ]);
     }
 

@@ -112,7 +112,7 @@
                 formData.section_a_1_dial_code = itisa1.s.dialCode;
                 
 
-            } else if (sectionId == 'section-b-1' || sectionId == 'section-b-2') {
+            } else if (sectionId == 'section-b-1' || sectionId == 'section-b-2' || sectionId == 'section-c-1' || sectionId == 'section-d-1') {
                 $(form).serializeArray().forEach(({ name, value }) => {
                     const keys = name.match(/[^\[\]]+/g);
 
@@ -361,6 +361,28 @@
             }
         });
     });
+</script>
+<script>
+    $(document).ready(function() {
+    $(document).on('click', '.section-d-1-add', function() {
+        let newRow = `<div class="row section-d-1-country-tax-residence-row">
+            <div class="col-sm-10">
+                <input type="text" class="form-control section-d-1-country-tax-residence" name="all_countries[]" >
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-success section-d-1-add">+</button>
+                <button type="button" class="btn btn-danger section-d-1-remove">-</button>
+            </div>
+        </div>`;
+        $('.section-d-1-country-tax-residence-row:last').after(newRow);
+    });
+
+    $(document).on('click', '.section-d-1-remove', function() {
+        if ($('.section-d-1-country-tax-residence-row').length > 1) {
+            $(this).closest('.section-d-1-country-tax-residence-row').remove();
+        }
+    });
+});
 </script>
 <script>
     $(document).ready(function() {
@@ -918,7 +940,10 @@ function saveInsuredLife(action) {
         passport_number: $('#c1passport_number').val(),
         country_of_issuance: $('#c1country_of_issuance').val(),
         relationship_to_policyholder: $('#c1relationship_to_policyholder').val(),
-        email: $('#c1email').val()
+        email: $('#c1email').val(),
+        all_countries: $('#section-c-1 [name="all_countries[]"]').map(function() {
+            return $(this).val();
+        }).get()
     };
     
     if (currentEditId) {
@@ -999,6 +1024,47 @@ function editInsuredLife(id) {
                                 
                 // $('#save-add-new').text('Update & Add New');
                 
+                if (response.tax && response.tax.length > 0) {
+                    $('#tempc1taxbox').empty();
+
+                    $('#tempc1taxbox').append(`
+                        <label for="c1countries_of_tax_residence" class="form-label">
+                            Countries of Tax Residence @requiredField
+                        </label>
+                    `);
+
+                    response.tax.forEach(function(tax) {
+                        $('#tempc1taxbox').append(`
+                            <div class="row section-c-1-country-tax-residence-row">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control section-c-1-country-tax-residence" name="all_countries[]" value="${tax}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-success section-c-1-add">+</button>
+                                    <button type="button" class="btn btn-danger section-c-1-remove">-</button>
+                                </div>
+                            </div>
+                        `);
+                    });
+
+                } else {
+                    $('#tempc1taxbox').html(`
+                        <label for="c1countries_of_tax_residence" class="form-label">
+                            Countries of Tax Residence @requiredField
+                        </label>
+                            <div class="row section-c-1-country-tax-residence-row">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control section-c-1-country-tax-residence" name="all_countries[]" >
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-success section-c-1-add">+</button>
+                                    <button type="button" class="btn btn-danger section-c-1-remove">-</button>
+                                </div>
+                            </div>
+                    `);
+                }
+
+
                 $('html, body').animate({
                     scrollTop: $('#form-section-c-1').offset().top - 100
                 }, 500);
@@ -1149,7 +1215,10 @@ function buildD1Payload() {
 		email: $('#d-1-email').val(),
 		beneficiary_death_benefit_allocation: $('#d-1-allocation').val(),
 		designation_of_beneficiary: $('input[name="d-1-designation"]:checked').val(),
-		id: $('#d-1-edit-id').val() || undefined
+		id: $('#d-1-edit-id').val() || undefined,
+        all_countries: $('#section-d-1 [name="all_countries[]"]').map(function() {
+            return $(this).val();
+        }).get()
 	};
 }
 
@@ -1258,6 +1327,47 @@ function d1EditBeneficiary(id) {
 				$('#d-1-email').val(res.data.email);
 				$('#d-1-allocation').val(res.data.beneficiary_death_benefit_allocation);
 				$(`input[name="d-1-designation"][value="${res.data.designation_of_beneficiary}"]`).prop('checked', true);
+
+                if (response.tax && response.tax.length > 0) {
+                    $('#tempd1taxbox').empty();
+
+                    $('#tempd1taxbox').append(`
+                        <label for="d1countries_of_tax_residence" class="form-label">
+                            Countries of Tax Residence @requiredField
+                        </label>
+                    `);
+
+                    response.tax.forEach(function(tax) {
+                        $('#tempd1taxbox').append(`
+                            <div class="row section-d-1-country-tax-residence-row">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control section-d-1-country-tax-residence" name="all_countries[]" value="${tax}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-success section-d-1-add">+</button>
+                                    <button type="button" class="btn btn-danger section-d-1-remove">-</button>
+                                </div>
+                            </div>
+                        `);
+                    });
+
+                } else {
+                    $('#tempd1taxbox').html(`
+                        <label for="d1countries_of_tax_residence" class="form-label">
+                            Countries of Tax Residence @requiredField
+                        </label>
+                            <div class="row section-d-1-country-tax-residence-row">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control section-d-1-country-tax-residence" name="all_countries[]">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-success section-d-1-add">+</button>
+                                    <button type="button" class="btn btn-danger section-d-1-remove">-</button>
+                                </div>
+                            </div>
+                    `);
+                }
+
 				$('html, body').animate({ scrollTop: $('#form-section-d-1').offset().top - 100 }, 400);
 			}
 		}

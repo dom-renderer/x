@@ -75,14 +75,17 @@
 			<label class="form-label">Country of Legal Residence @requiredField</label>
 			<input type="text" class="form-control" id="d-1-legal-residence" name="country_of_legal_residence" >
 		</div>
-		<div class="col-md-6 mb-3">
-			<label class="form-label">Countries of Tax Residence @requiredField</label>
-			<div class="input-group">
-				<input type="text" class="form-control" id="d-1-tax-input">
-				<button type="button" class="btn btn-success d-1-add-tax">+</button>
-				<button type="button" class="btn btn-danger d-1-remove-tax">-</button>
-			</div>
-			<div id="d-1-tax-list" class="mt-2"></div>
+		<div class="col-md-6 mb-3" id="tempd1taxbox">
+            <label for="c1countries_of_tax_residence" class="form-label">Countries of Tax Residence @requiredField</label>
+            <div class="row section-d-1-country-tax-residence-row">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control section-d-1-country-tax-residence" name="all_countries[]" >
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-success section-d-1-add">+</button>
+                    <button type="button" class="btn btn-danger section-d-1-remove">-</button>
+                </div>
+            </div>
 		</div>
 	</div>
 

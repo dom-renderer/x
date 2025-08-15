@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Customer;
+use App\Models\PolicyBeneficiary;
 use App\Models\PolicyCommunication;
 use App\Models\PolicyController;
 use App\Models\PolicyCountryOfTaxResidence;
@@ -11,6 +12,7 @@ use App\Models\PolicyEconomicProfile;
 use App\Models\PolicyFeeSummaryExternal;
 use App\Models\PolicyFeeSummaryInternalFee;
 use App\Models\PolicyHolder;
+use App\Models\PolicyInsuredLifeInformation;
 use App\Models\PolicyInvestmentNote;
 use App\Models\PolicyPremium;
 use Illuminate\Support\Facades\Validator;
@@ -341,12 +343,14 @@ class PolicyService {
 
                                 if (isset($request['data']['all_countries']) && is_array($request['data']['all_countries'])) {
                                     foreach ($request['data']['all_countries'] as $thisCountry) {
-                                        $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
-                                            'eloquent' => Customer::class,
-                                            'policy_id' => $policy->id,
-                                            'eloquent_id' => $customer->id,
-                                            'country' => $thisCountry
-                                        ])->id;
+                                        if (!empty($thisCountry)) {
+                                            $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
+                                                'eloquent' => Customer::class,
+                                                'policy_id' => $policy->id,
+                                                'eloquent_id' => $customer->id,
+                                                'country' => $thisCountry
+                                            ])->id;
+                                        }
                                     }
                                 }
 
@@ -404,12 +408,14 @@ class PolicyService {
 
                                 if (isset($request['data']['all_countries']) && is_array($request['data']['all_countries'])) {
                                     foreach ($request['data']['all_countries'] as $thisCountry) {
-                                        $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
-                                            'eloquent' => Customer::class,
-                                            'policy_id' => $policy->id,
-                                            'eloquent_id' => $customer->id,
-                                            'country' => $thisCountry
-                                        ])->id;
+                                        if (!empty($thisCountry)) {
+                                            $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
+                                                'eloquent' => Customer::class,
+                                                'policy_id' => $policy->id,
+                                                'eloquent_id' => $customer->id,
+                                                'country' => $thisCountry
+                                            ])->id;
+                                        }
                                     }
                                 }
 
@@ -476,12 +482,14 @@ class PolicyService {
 
                     if (isset($request['data']['all_countries']) && is_array($request['data']['all_countries']) && isset($pcntrlr->id)) {
                         foreach ($request['data']['all_countries'] as $thisCountry) {
-                            $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
-                                'eloquent' => PolicyController::class,
-                                'policy_id' => $policy->id,
-                                'eloquent_id' => $pcntrlr->id,
-                                'country' => $thisCountry
-                            ])->id;
+                            if (!empty($thisCountry)) {
+                                $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
+                                    'eloquent' => PolicyController::class,
+                                    'policy_id' => $policy->id,
+                                    'eloquent_id' => $pcntrlr->id,
+                                    'country' => $thisCountry
+                                ])->id;
+                            }
                         }
                     }
 
@@ -521,7 +529,8 @@ class PolicyService {
                         ];
 
                         if (isset($request['data']['id']) && $request['data']['id']) {
-                            $insuredLife = \App\Models\PolicyInsuredLifeInformation::find($request['data']['id']);
+                            $theId = $request['data']['id'];
+                            $insuredLife = PolicyInsuredLifeInformation::find($request['data']['id']);
                             if ($insuredLife) {
                                 $insuredLife->update(array_merge($insuredLifeData, [
                                     'updated_by' => $currentLoggedInUser
@@ -529,8 +538,30 @@ class PolicyService {
                             }
                         } else {
                             $insuredLifeData['added_by'] = $currentLoggedInUser;
-                            \App\Models\PolicyInsuredLifeInformation::create($insuredLifeData);
+                            $theId = PolicyInsuredLifeInformation::create($insuredLifeData)->id;
                         }
+
+                        $toKeepLocations = [];
+
+                        if (isset($request['data']['all_countries']) && is_array($request['data']['all_countries']) && isset($theId)) {
+                            foreach ($request['data']['all_countries'] as $thisCountry) {
+                                if (!empty($thisCountry)) {
+                                    $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
+                                        'eloquent' => PolicyInsuredLifeInformation::class,
+                                        'policy_id' => $policy->id,
+                                        'eloquent_id' => $theId,
+                                        'country' => $thisCountry
+                                    ])->id;
+                                }
+                            }
+                        }
+
+                        if (!empty($toKeepLocations)) {
+                            PolicyCountryOfTaxResidence::where('policy_id', $policy->id)->where('eloquent', PolicyInsuredLifeInformation::class)->whereNotIn('id', $toKeepLocations)->delete();
+                        } else {
+                            PolicyCountryOfTaxResidence::where('policy_id', $policy->id)->where('eloquent', PolicyInsuredLifeInformation::class)->delete();
+                        }
+
                     } else if (isset($request['data']) && is_array($request['data'])) {
 
                         $insuredLifeData = [
@@ -556,7 +587,8 @@ class PolicyService {
                         ];
 
                         if (isset($request['data']['id']) && $request['data']['id']) {
-                            $insuredLife = \App\Models\PolicyInsuredLifeInformation::find($request['data']['id']);
+                            $theId = $request['data']['id'];
+                            $insuredLife = PolicyInsuredLifeInformation::find($request['data']['id']);
                             if ($insuredLife) {
                                 $insuredLife->update(array_merge($insuredLifeData, [
                                     'updated_by' => $currentLoggedInUser
@@ -564,8 +596,29 @@ class PolicyService {
                             }
                         } else {
                             $insuredLifeData['added_by'] = $currentLoggedInUser;
-                            \App\Models\PolicyInsuredLifeInformation::create($insuredLifeData);
-                        }            
+                            $theId = PolicyInsuredLifeInformation::create($insuredLifeData)->id;
+                        }
+
+                        $toKeepLocations = [];
+
+                        if (isset($request['data']['all_countries']) && is_array($request['data']['all_countries']) && isset($theId)) {
+                            foreach ($request['data']['all_countries'] as $thisCountry) {
+                                if (!empty($thisCountry)) {
+                                    $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
+                                        'eloquent' => PolicyInsuredLifeInformation::class,
+                                        'policy_id' => $policy->id,
+                                        'eloquent_id' => $theId,
+                                        'country' => $thisCountry
+                                    ])->id;
+                                }
+                            }
+                        }
+
+                        if (!empty($toKeepLocations)) {
+                            PolicyCountryOfTaxResidence::where('policy_id', $policy->id)->where('eloquent', PolicyInsuredLifeInformation::class)->whereNotIn('id', $toKeepLocations)->delete();
+                        } else {
+                            PolicyCountryOfTaxResidence::where('policy_id', $policy->id)->where('eloquent', PolicyInsuredLifeInformation::class)->delete();
+                        }
                     }
 
                     $response['next_section'] = self::$sections[5];
@@ -573,7 +626,6 @@ class PolicyService {
                 case self::$sections[5]:
 
                     if (isset($request['data']) && is_array($request['data']) && isset($request['data']['insured_life_id'])) {
-                        dd($request['data']);
                         $payload = [
                             'insured_life_id' => $request['data']['insured_life_id'],
                             'policy_id' => $policy->id,
@@ -600,12 +652,34 @@ class PolicyService {
                         ];
 
                         if (!empty($request['data']['id'])) {
-                            $existing = \App\Models\PolicyBeneficiary::find($request['data']['id']);
+                            $theId = $request['data']['id'];
+                            $existing = PolicyBeneficiary::find($request['data']['id']);
                             if ($existing) {
                                 $existing->update(array_merge($payload, ['updated_by' => $currentLoggedInUser]));
                             }
                         } else {
-                            \App\Models\PolicyBeneficiary::create(array_merge($payload, ['added_by' => $currentLoggedInUser]));
+                            $theId = PolicyBeneficiary::create(array_merge($payload, ['added_by' => $currentLoggedInUser]))->id;
+                        }
+
+                        $toKeepLocations = [];
+
+                        if (isset($request['data']['all_countries']) && is_array($request['data']['all_countries']) && isset($theId)) {
+                            foreach ($request['data']['all_countries'] as $thisCountry) {
+                                if (!empty($thisCountry)) {
+                                $toKeepLocations[] = PolicyCountryOfTaxResidence::updateOrCreate([
+                                    'eloquent' => PolicyBeneficiary::class,
+                                    'policy_id' => $policy->id,
+                                    'eloquent_id' => $theId,
+                                    'country' => $thisCountry
+                                ])->id;
+                                }
+                            }
+                        }
+
+                        if (!empty($toKeepLocations)) {
+                            PolicyCountryOfTaxResidence::where('policy_id', $policy->id)->where('eloquent', PolicyBeneficiary::class)->whereNotIn('id', $toKeepLocations)->delete();
+                        } else {
+                            PolicyCountryOfTaxResidence::where('policy_id', $policy->id)->where('eloquent', PolicyBeneficiary::class)->delete();
                         }
 
                         if ($request->save === 'save-and-add') {
